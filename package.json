@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "clean": "rm -rf dist src/versionInfo.ts",
-    "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-js && npm run build-dist && npm run postbuild-js",
+    "build": "npm run clean && npm run build-version && npm run build-js && npm run build-dist && npm run postbuild-js",
     "build-version": "./timestamp.sh > src/versionInfo.ts  && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
     "build-dist": "webpack --progress",
@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "solid-namespace": "^0.5.4",
-    "solid-oidc": "^0.0.3"
+    "solid-oidc": "github:JavaScriptSolidServer/solid-oidc"
   },
   "peerDependencies": {
     "rdflib": "^2.3.0"
