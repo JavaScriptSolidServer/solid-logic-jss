@@ -8,6 +8,14 @@ export default {
     customExportConditions: ['node'],
   },
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  // Transform ESM packages (solid-oidc and jose)
+  transformIgnorePatterns: [
+    '/node_modules/(?!(solid-oidc|jose)/)',
+  ],
+  // Map CDN imports to npm packages for testing
+  moduleNameMapper: {
+    '^https://esm\\.sh/jose@5$': 'jose',
+  },
   transform: {
     '^.+\\.[tj]sx?$': ['babel-jest', { configFile: './babel.config.mjs' }],
   },
