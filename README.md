@@ -1,135 +1,98 @@
-# solid-logic
+# solid-logic-jss
 
-<img src="https://raw.githubusercontent.com/solid/community-server/main/templates/images/solid.svg" alt="[Solid logo]" height="150" align="right"/>
+[![MIT license](https://img.shields.io/github/license/JavaScriptSolidServer/solid-logic-jss)](LICENSE)
 
-[![MIT license](https://img.shields.io/github/license/solidos/solidos)](https://github.com/solidos/solidos/blob/main/LICENSE.md)
+**Core Solid logic with minimal solid-oidc authentication (JSS variant)**
 
+A fork of [solid-logic](https://github.com/solidos/solid-logic) that replaces `@inrupt/solid-client-authn-browser` with the minimal [solid-oidc](https://github.com/JavaScriptSolidServer/solid-oidc) library.
 
-Core business logic of SolidOS which can be used for any webapp as well.
+## Why This Fork?
 
+| Aspect | solid-logic (original) | solid-logic-jss |
+|--------|------------------------|-----------------|
+| Auth library | @inrupt/solid-client-authn-browser (~150KB) | solid-oidc (~20KB) |
+| Auth code | Compiled/minified | 584 lines, readable |
+| Dependencies | Many | Minimal |
 
-# Usage
-
-## 📦 Install via npm
+## Installation
 
 ```sh
-npm install solid-logic rdflib
+npm install solid-logic-jss rdflib
 ```
 
-> **Important**: `rdflib` is a peer dependency - you must install it separately.
+> **Note**: `rdflib` is a peer dependency.
 
-### Import in your project (ESM/TypeScript)
+## Usage
 
 ```js
-import { solidLogicSingleton, store, authn } from 'solid-logic';
+import { solidLogicSingleton, store, authn, authSession } from 'solid-logic-jss'
 
-// Example usage
-console.log('Current user:', authn.currentUser());
+// Check current user
+console.log('Current user:', authn.currentUser())
+
+// Login
+await authSession.login({
+  oidcIssuer: 'https://solidcommunity.net',
+  redirectUrl: window.location.href
+})
+
+// Make authenticated requests
+const response = await authSession.fetch('https://pod.example/private/data.ttl')
 ```
 
-## 🌐 Use directly in a browser
-
-Both UMD and ESM bundles externalize rdflib to keep bundle sizes small and avoid version conflicts.
-
-## Available Files
-
-| Format | File | Usage | Global Variable |
-|--------|------|-------|----------------|
-| UMD | `dist/solid-logic.js` | Development | `window.SolidLogic` |
-| UMD | `dist/solid-logic.min.js` | Production | `window.SolidLogic` |
-| ESM | `dist/solid-logic.esm.js` | Development | Import only |
-| ESM | `dist/solid-logic.esm.min.js` | Production | Import only |
-
-### UMD Bundle (Script Tags)
-
-**⚠️ Important**: Load rdflib **before** solid-logic or you'll get `$rdf is not defined` errors.
-
-```html
-<!-- 1. Load rdflib first (creates window.$rdf) -->
-<script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
-
-<!-- 2. Load solid-logic (expects $rdf to exist) -->
-<script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
-
-<script>
-	// Access via global variable
-	const { solidLogicSingleton, store, authn } = window.SolidLogic;
-	
-	// Example usage
-	console.log('Store:', store);
-	console.log('Authentication:', authn.currentUser());
-</script>
-```
-
-### ESM Bundle (Native Modules)
+## Browser Usage (ESM)
 
 ```html
 <script type="module">
-	import * as $rdf from 'https://esm.sh/rdflib';
-	import { solidLogicSingleton, store, authn } from 'https://esm.sh/solid-logic@4.0.1';
+  import * as $rdf from 'https://esm.sh/rdflib'
+  import { solidLogicSingleton, authn, authSession } from 'https://esm.sh/solid-logic-jss'
 
-	// Example usage
-	console.log('Store:', store);
-	console.log('Authentication:', authn.currentUser());
+  // Handle login redirect
+  await authSession.handleIncomingRedirect({ restorePreviousSession: true })
+
+  console.log('Current user:', authn.currentUser())
 </script>
 ```
 
-### ESM with Import Maps (Recommended)
+## API Compatibility
 
-```html
-<script type="importmap">
-{
-	"imports": {
-		"rdflib": "https://esm.sh/rdflib",
-		"solid-logic": "https://esm.sh/solid-logic@4.0.1"
-	}
-}
-</script>
-<script type="module">
-	import * as $rdf from 'rdflib';
-	import { solidLogicSingleton, store, authn } from 'solid-logic';
+This fork maintains API compatibility with solid-logic. The `authSession` object provides the same interface as `@inrupt/solid-client-authn-browser`:
 
-	// Example usage - cleaner imports!
-	console.log('Store:', store);
-	console.log('Authentication:', authn.currentUser());
-</script>
-```
+- `authSession.info.webId` - Current user's WebID
+- `authSession.info.isLoggedIn` - Login status
+- `authSession.login(options)` - Initiate login
+- `authSession.logout()` - Log out
+- `authSession.fetch(url, init)` - Authenticated fetch
+- `authSession.handleIncomingRedirect(options)` - Handle OIDC redirect
+- `authSession.events.on(event, callback)` - Session events
 
 ## Common Exports
 
 ```js
-import { 
-	solidLogicSingleton,  // Complete singleton instance
-	store,                // RDF store
-	authn,                // Authentication logic
-	authSession,          // Authentication session
-	ACL_LINK,            // ACL constants
-	getSuggestedIssuers,  // Identity provider suggestions
-	createTypeIndexLogic, // Type index functionality
-	// Error classes
-	UnauthorizedError,
-	NotFoundError,
-	FetchError
-} from 'solid-logic';
+import {
+  solidLogicSingleton,  // Complete singleton instance
+  store,                // RDF store
+  authn,                // Authentication logic
+  authSession,          // Authentication session
+  ACL_LINK,             // ACL constants
+  // Error classes
+  UnauthorizedError,
+  NotFoundError,
+  FetchError
+} from 'solid-logic-jss'
 ```
 
-# How to develop
+## Related
 
-Check the scripts in the `package.json` for build, watch, lint and test.
+- [solid-oidc](https://github.com/JavaScriptSolidServer/solid-oidc) - Minimal OIDC client
+- [solid-logic](https://github.com/solidos/solid-logic) - Original library
+- [JavaScriptSolidServer](https://github.com/JavaScriptSolidServer) - JSS ecosystem
 
-# Used stack
+## Credits
 
-* TypeScript + Babel
-* Jest
-* ESLint
-* Webpack
+- Original [solid-logic](https://github.com/solidos/solid-logic) by SolidOS team
+- [solid-oidc](https://github.com/JavaScriptSolidServer/solid-oidc) based on work by [uvdsl](https://github.com/uvdsl)
 
-# How to release
+## License
 
-Change version and push directly to main. This will trigger the npm release latest script in CI.
-
-# History
-
-Solid-logic was a move to separate business logic from UI functionality so that people using different UI frameworks could use logic code. 
-
-It was created when the "chat with me" feature was built. We needed to share logic between chat-pane and profile-pane (which was part of solid-panes back then I think) due to that feature. The whole idea of it is to separate core solid logic from UI components, to make logic reusable, e.g. by other UI libraries or even non web apps like CLI tools etc. 
+MIT

@@ -1,7 +1,7 @@
 {
-  "name": "solid-logic",
-  "version": "4.0.1",
-  "description": "Core business logic of SolidOS",
+  "name": "solid-logic-jss",
+  "version": "4.1.0",
+  "description": "Core Solid logic with minimal solid-oidc authentication (JSS variant)",
   "type": "module",
   "main": "dist/solid-logic.js",
   "module": "dist/solid-logic.esm.js",
@@ -39,14 +39,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/solidos/solid-logic.git"
+    "url": "git+https://github.com/JavaScriptSolidServer/solid-logic-jss.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/solidos/solid-logic/issues"
+    "url": "https://github.com/JavaScriptSolidServer/solid-logic-jss/issues"
   },
-  "homepage": "https://github.com/solidos/solid-logic#readme",
+  "homepage": "https://github.com/JavaScriptSolidServer/solid-logic-jss#readme",
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
@@ -69,7 +69,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "@inrupt/solid-client-authn-browser": "^3.1.0",
+    "solid-oidc": "^0.0.3",
     "solid-namespace": "^0.5.4"
   },
   "peerDependencies": {

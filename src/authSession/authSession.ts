@@ -1,7 +1,3 @@
-import {
-  Session,
-} from '@inrupt/solid-client-authn-browser'
+import { Session } from './solidOidcAdapter'
 
 export const authSession = new Session()
-
-  
