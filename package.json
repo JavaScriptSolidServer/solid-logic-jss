@@ -3,14 +3,14 @@
   "version": "4.1.0",
   "description": "Core Solid logic with minimal solid-oidc authentication (JSS variant)",
   "type": "module",
-  "main": "dist/solid-logic.js",
+  "main": "dist/solid-logic.esm.js",
   "module": "dist/solid-logic.esm.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/solid-logic.esm.js",
-      "require": "./dist/solid-logic.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/solid-logic.esm.js"
     }
   },
   "sideEffects": false,
