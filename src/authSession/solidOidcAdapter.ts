@@ -9,8 +9,7 @@
 
 import {
   Session as SolidOidcSession,
-  SessionDatabase,
-  SessionEvents
+  SessionDatabase
 } from 'solid-oidc'
 
 /**
@@ -25,19 +24,25 @@ export const EVENTS = {
 } as const
 
 /**
+ * Callback type for event listeners
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EventCallback = (...args: any[]) => void
+
+/**
  * Simple event emitter for compatibility with Inrupt's session.events API
  */
 class EventEmitter {
-  private listeners: Map<string, Set<(...args: unknown[]) => void>> = new Map()
+  private listeners: Map<string, Set<EventCallback>> = new Map()
 
-  on(event: string, callback: (...args: unknown[]) => void): void {
+  on(event: string, callback: EventCallback): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set())
     }
     this.listeners.get(event)!.add(callback)
   }
 
-  off(event: string, callback: (...args: unknown[]) => void): void {
+  off(event: string, callback: EventCallback): void {
     this.listeners.get(event)?.delete(callback)
   }
 

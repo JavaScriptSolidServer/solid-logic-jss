@@ -42,7 +42,7 @@ export class SolidAuthnLogic implements AuthnLogic {
     }
     this.session.events.on(EVENTS.SESSION_RESTORED, (url) => {
       debug.log(`Session restored to ${url}`)
-      if (document.location.toString() !== url) history.replaceState(null, '', url)
+      if (document.location.toString() !== url) history.replaceState(null, '', url as string)
     })
 
     /**
