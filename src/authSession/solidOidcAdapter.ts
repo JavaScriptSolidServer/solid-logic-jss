@@ -26,7 +26,6 @@ export const EVENTS = {
 /**
  * Callback type for event listeners
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type EventCallback = (...args: any[]) => void
 
 /**
